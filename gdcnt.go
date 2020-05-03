@@ -4,9 +4,10 @@ import (
     "fmt"
     "log"
     "os"
+    "strconv"
 )
 
-func count(dirname string) (int, int) {
+func count(dirname string, maxcount int) (int, int) {
     dir := 0
     fil := 0
 
@@ -25,13 +26,18 @@ func count(dirname string) (int, int) {
 //		fmt.Println("dirname:", dirname )
 //		fmt.Println("Directory Name:", file.Name() )
 		dir++
-                dd, ff := count( dirname + "/" + file.Name() )
+                dd, ff := count( dirname + "/" + file.Name(), maxcount )
 		dir += dd
 		fil += ff
 	} else {
 		fil++
 	}
     }
+    if ( maxcount != 0 ) {
+        if ( dir+fil >=  maxcount ) {
+          fmt.Println("Exceeds limit of", maxcount)
+        }
+    } 
     fmt.Println(dirname)
     fmt.Println("  total:", dir+fil, "files:", fil, "dirs:", dir)
     return dir, fil
@@ -41,5 +47,6 @@ func main() {
     args := os.Args[1:]
 
     dirname := args[0]
-    _, _ = count( dirname )
+    maxcount, _ :=strconv.Atoi( args[1] )
+    _, _ = count( dirname, maxcount )
 }
